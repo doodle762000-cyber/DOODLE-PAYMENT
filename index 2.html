@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOODLE76 - Secure Payment</title>
+
+<style>
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #8EC5FC, #E0C3FC);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  overflow: hidden;
+}
+
+.container {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px);
+  padding: 30px;
+  width: 350px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(0,0,0,0.15);
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+img {
+  width: 220px;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 14px 25px;
+  width: 100%;
+  font-size: 18px;
+  background: #ff6b00;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+}
+
+button:hover { background: #e05800; }
+
+.upi-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  background: white;
+  border-radius: 8px;
+  padding: 10px 20px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Confetti Canvas */
+#confetti {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* Success Notification Box */
+#successBox {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 25px 40px;
+  border-radius: 20px;
+  text-align: center;
+  display: none;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="confetti"></canvas>
+
+<div class="container">
+  <img src="DOODLE_LOGO.png" alt="Doodle76 Logo">
+
+  <h2>Scan & Pay</h2>
+  <img src="QR_CODE.png" alt="QR Code">
+
+  <div class="upi-text">UPI ID: 7284082668@pzw</div>
+  <br><br>
+
+  <button onclick="paymentSuccess()">I Have Paid</button>
+</div>
+
+<div id="successBox">🎉 Payment Successful!</div>
+
+<script>
+function paymentSuccess(){
+  document.getElementById("successBox").style.display = "block";
+  startConfetti();
+  setTimeout(()=>{ window.location.href='thankyou.html'; }, 2500);
+}
+
+// *** CONFETTI ***
+let canvas = document.getElementById("confetti");
+let ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let confetti = [];
+for (let i=0; i<200; i++){
+  confetti.push({
+    x: Math.random()*canvas.width,
+    y: Math.random()*canvas.height - canvas.height,
+    r: Math.random()*6+3,
+    d: Math.random()*0.7+0.5
+  });
+}
+
+function startConfetti(){ setInterval(draw, 10); }
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  for(let i=0;i<confetti.length;i++){
+    let p = confetti[i];
+    ctx.beginPath();
+    ctx.fillStyle = `hsl(${Math.random()*360},100%,50%)`;
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+    ctx.fill();
+    p.y += p.d;
+    if(p.y > canvas.height) p.y = -10;
+  }
+}
+</script>
+
+</body>
+</html>
